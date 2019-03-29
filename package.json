@@ -8,6 +8,6 @@
     "tape-run": "^5.0.0"
   },
   "scripts": {
-    "test": "browserify test.js | tape-run"
+    "test": "node test.js"
   }
 }
