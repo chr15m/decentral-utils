@@ -90,15 +90,17 @@ function make_sig_check(struct) {
 // [note that supercop has different parameter ordering]
 //
 function freshest(struct, struct_new, verify) {
+  var struct = make_struct(struct);
+  var struct_new = make_struct(struct_new);
   // check sequence number is an int
   if (isNaN(struct_new.seq)) return struct;
   if (Math.round(struct_new.seq) != struct_new.seq) return struct;
   // check sequence number is non-zero
   if (struct_new.seq <= 0) return struct;
   // check sequence number is higher
-  if (struct_new.seq < struct.seq) return struct;
+  if (struct_new.seq < (struct ? struct.seq : 1)) return struct;
   // check cas is previous seq
-  if (struct_new["cas"] != undefined && struct_new.cas != struct.seq) return struct;
+  if (struct_new["cas"] != undefined && struct_new.cas != (struct ? struct.seq : 1)) return struct;
   // check length is shorter than required
   if (struct_new.v.length > 1000) return struct;
   // check salt length is shorter than 64
@@ -115,5 +117,6 @@ module.exports = {
   u8_to_utf8: u8_to_utf8,
   utf8_to_u8: utf8_to_u8,
   make_sig_check: make_sig_check,
+  make_struct: make_struct,
   freshest: freshest,
 }
