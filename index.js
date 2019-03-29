@@ -41,10 +41,12 @@ if (typeof(TextEncoder) == "object") {
 // e.g. 4:salt6:foobar3:seqi4e1:v12:Hello world!
 function make_sig_check(struct) {
   var seq = isNaN(struct.seq) ? 1 : Math.max(Math.floor(struct.seq), 1);
-  var header = "4:salt" + utf8_to_u8(struct.salt).length + ":" + struct.salt + "3:seq" + "i" + seq + "e" + "1:v" + struct.v.length;
-  var check = new Uint8Array(header.length + struct.v.length);
+  var salt = struct.salt ? struct.salt.substr(0, 64) : null;
+  var header = (struct.salt ? ("4:salt" + utf8_to_u8(struct.salt).length + ":" + struct.salt) : "") + "3:seq" + "i" + seq + "e" + "1:v" + struct.v.length;
+  var header_length = utf8_to_u8(header).length;
+  var check = new Uint8Array(header_length + struct.v.length);
   check.set(utf8_to_u8(header));
-  check.set(struct.v, header.length)
+  check.set(struct.v, header_length)
   return check;
 }
 
