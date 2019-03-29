@@ -82,6 +82,8 @@ function freshest(struct, struct_new, verify) {
   if (struct_new["cas"] != undefined && struct_new.cas != struct.seq) return struct;
   // check length is shorter than required
   if (struct_new.v.length > 1000) return struct;
+  // check salt length is shorter than 64
+  if (struct_new.salt > 64) return struct;
   // check structure is correctly signed
   if (!verify(make_sig_check(struct_new), struct_new.sig, struct_new.k)) return struct;
   // all tests have passed, return the new structure
