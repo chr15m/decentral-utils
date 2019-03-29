@@ -40,7 +40,17 @@ if (typeof(TextEncoder) == "object") {
 // assemble a valid BEP0044 struct with correctly clamped values and defaults
 function make_struct(struct) {
   var struct_new = {};
-  struct_new.v = typeof(struct.v) == "string" ? utf8_to_u8(struct.v) : struct.v;
+  var struct = struct || {};
+  var val = struct.v || "";
+  if (val instanceof Uint8Array) {
+    struct_new.v = val;
+  } else if (typeof(val) == "string"){
+    struct_new.v = utf8_to_u8(val.toString());
+  } else if (val.length) {
+    struct_new.v = Uint8Array.from(val);
+  } else {
+    throw("struct.v must be a string or byte-array in make_struct()");
+  }
   struct_new.seq = isNaN(struct.seq) ? 1 : Math.max(Math.floor(struct.seq), 1);
   if (struct.salt) struct_new.salt = struct.salt.substr(0, 64);
   if (struct.cas && !isNaN(struct.cas)) struct_new.cas = struct.cas;
