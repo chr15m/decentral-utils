@@ -93,6 +93,7 @@ function make_sig_check(struct) {
 //
 function freshest(struct, struct_new, verify) {
   var struct = make_struct(struct);
+  var struct_new_return = struct_new;
   var struct_new = make_struct(struct_new);
   // check sequence number is an int
   if (isNaN(struct_new.seq)) return struct;
@@ -110,7 +111,7 @@ function freshest(struct, struct_new, verify) {
   // check structure is correctly signed
   if (!verify(make_sig_check(struct_new), struct_new.sig, struct_new.k)) return struct;
   // all tests have passed, return the new structure
-  return struct_new;
+  return struct_new_return;
 }
 
 module.exports = {
