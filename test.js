@@ -15,7 +15,7 @@ test("Conversion functions", function (t) {
 });
 
 test("Sig material generation", function (t) {
-  t.plan(5);
+  t.plan(6);
 
   t.equal(d.u8_to_utf8(d.make_sig_check({
     "salt": "foobar",
@@ -33,6 +33,10 @@ test("Sig material generation", function (t) {
     "seq": 7,
     "v": d.utf8_to_u8("One two three goober."),
   })), "3:seqi7e1:v21:One two three goober.", "Check make_sig_check");
+
+  t.equal(d.u8_to_utf8(d.make_sig_check({
+    "v": "Auto encode test.",
+  })), "3:seqi1e1:v17:Auto encode test.", "Check make_sig_check");
 
   // bep 0044 test vector 1
   t.equal(d.u8_to_utf8(d.make_sig_check({
