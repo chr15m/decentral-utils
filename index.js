@@ -54,6 +54,8 @@ function make_struct(struct) {
   struct_new.seq = isNaN(struct.seq) ? 1 : Math.max(Math.floor(struct.seq), 1);
   if (struct.salt) struct_new.salt = struct.salt.substr(0, 64);
   if (struct.cas && !isNaN(struct.cas)) struct_new.cas = struct.cas;
+  if (struct.k) struct_new.k = struct.k;
+  if (struct.sig) struct_new.sig = struct.sig;
   return struct_new;
 }
 
