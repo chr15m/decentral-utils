@@ -14,6 +14,23 @@ test("Conversion functions", function (t) {
   t.equal(d.u8_to_utf8(new Uint8Array([72,101,108,108,111,33,32,228,184,173,232,139,177,229,173,151,229,133,184])), "Hello! 中英字典", "Check u8_to_utf8");
 });
 
+test("Structure defaults and clamping", function(t) {
+  t.plan(9);
+
+  var hello = new Uint8Array([104, 101, 108, 108, 111])
+
+  t.deepEqual(d.make_struct(null), {"v": new Uint8Array(), "seq": 1}, "Check null value");
+  t.deepEqual(d.make_struct({}), {"v": new Uint8Array(), "seq": 1}, "Check empty object");
+  t.throws(function() { d.make_struct({"v": 12}) }, /must be a string or/, "Check type cast");
+  t.deepEqual(d.make_struct({"v": "hello", "seq": 15}), {"v": hello, "seq": 15}, "Check high seq");
+  t.deepEqual(d.make_struct({"v": "hello", "seq": "bad"}), {"v": hello, "seq": 1}, "Check string seq");
+  t.deepEqual(d.make_struct({"v": "hello", "seq": -1000}), {"v": hello, "seq": 1}, "Check negative seq");
+  t.deepEqual(d.make_struct({"v": [1,2,3]}), {"v": new Uint8Array([1,2,3]), "seq": 1}, "Check bytearray value");
+  t.deepEqual(d.make_struct({"v": "hello", "salt": "beep"}), {"v": hello, "salt": "beep", "seq": 1}, "Check salt");
+  t.deepEqual(d.make_struct({"v": "hello", "salt": "1234567890123456789012345678901234567890123456789012345678901234567890"}),
+    {"v": hello, "salt": "1234567890123456789012345678901234567890123456789012345678901234", "seq": 1}, "Check salt clamp");
+});
+
 test("Sig material generation", function (t) {
   t.plan(6);
 
