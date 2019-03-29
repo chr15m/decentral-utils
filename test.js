@@ -2,7 +2,6 @@ var test = require('tape');
 var d = require('./index.js');
 var nacl = require('tweetnacl');
 
-
 test('Test conversion functions', function (t) {
   t.plan(10);
 
@@ -18,18 +17,18 @@ test('Test conversion functions', function (t) {
     "salt": "foobar",
     "seq": 5,
     "v": d.utf8_to_u8("Hello! 中英字典"),
-  })), "4:salt6:foobar3:seqi5e1:v19Hello! 中英字典", "Check make_sig_check");
+  })), "4:salt6:foobar3:seqi5e1:v19:Hello! 中英字典", "Check make_sig_check");
 
   t.equal(d.u8_to_utf8(d.make_sig_check({
     "salt": "中英字典",
     "seq": 5,
     "v": d.utf8_to_u8("One two three foobar."),
-  })), "4:salt12:中英字典3:seqi5e1:v21One two three foobar.", "Check make_sig_check");
+  })), "4:salt12:中英字典3:seqi5e1:v21:One two three foobar.", "Check make_sig_check");
 
   t.equal(d.u8_to_utf8(d.make_sig_check({
     "seq": 7,
     "v": d.utf8_to_u8("One two three goober."),
-  })), "3:seqi7e1:v21One two three goober.", "Check make_sig_check");
+  })), "3:seqi7e1:v21:One two three goober.", "Check make_sig_check");
 
   // bep 0044 test vector 1
   t.equal(d.u8_to_utf8(d.make_sig_check({
