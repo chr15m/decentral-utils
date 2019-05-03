@@ -1,5 +1,7 @@
 A minimal set of JavaScript utility functions for decentralized web applications.
 
+`npm i decentral-utils`
+
 ## Encoding and decoding from `Uint8Array`s
 
 ### `u8_to_hex(uint8_array)`
