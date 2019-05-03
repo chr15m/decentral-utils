@@ -1,13 +1,29 @@
 {
-  "dependencies": {
+  "name": "decentral-utils",
+  "version": "0.0.1",
+  "description": "JavaScript utility functions for decentralized web applications.",
+  "main": "index.js",
+  "author": "Chris McCormick <chris@mccormick.cx>",
+  "homepage": "https://github.com/chr15m/decentral-utils",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chr15m/decentral-utils.git",
+    "web": "https://github.com/chr15m/decentral-utils"
   },
+  "bugs": {
+    "url": "https://github.com/chr15m/decentral-utils/issues/"
+  },
+  "dependencies": {},
   "devDependencies": {
     "browserify": "^16.2.3",
-    "headless": "^1.2.0",
-    "tape": "^4.10.1",
-    "tape-run": "^5.0.0"
+    "babel-minify": "^0.5.0",
+    "tape": "^4.10.1"
   },
   "scripts": {
+    "build": "npm run compile && npm run minify",
+    "minify": "cat index.js | minify > decentral-utils.min.js",
+    "compile": "browserify -s DecentralUtils index.js > decentral-utils.js",
+    "size": "npm run build && cat decentral-utils.min.js | gzip | wc -c",
     "test": "node test.js"
   }
 }
